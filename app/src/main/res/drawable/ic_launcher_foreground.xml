@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 한지색 도장 테두리 안에 집과 인주색 점 하나. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <path
+        android:pathData="M54,25 A29,29 0 1,1 53.99,25 Z"
+        android:strokeColor="@color/hanji"
+        android:strokeWidth="4.5" />
+    <path
+        android:pathData="M38,54 L54,40 L70,54"
+        android:strokeColor="@color/hanji"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:strokeWidth="4.5" />
+    <path
+        android:pathData="M43,52 L43,68 L65,68 L65,52"
+        android:strokeColor="@color/hanji"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:strokeWidth="4.5" />
+    <path
+        android:fillColor="#E8654D"
+        android:pathData="M54,60 m-4.2,0 a4.2,4.2 0 1,0 8.4,0 a4.2,4.2 0 1,0 -8.4,0" />
+</vector>

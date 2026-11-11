@@ -1,0 +1,288 @@
+/* 안부 웹 시연. 색과 글자 크기는 앱(app/src/main/java/app/anbu/car/ui/Theme.kt)과 같다. */
+:root {
+  --paper: #F2EEE4;
+  --card: #FCFAF5;
+  --sunken: #E6E0D2;
+  --ink: #14263A;
+  --ink-soft: #465564;
+  --rule: #CBC3B1;
+  --action: #173F5F;
+  --action-pressed: #0E2A41;
+  --on-action: #FFFFFF;
+  --seal: #BE2F1D;
+  --similar: #256447;
+  --slightly: #8A5600;
+  --very: #B3261E;
+  --desk: #DDD6C7;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body {
+  background: var(--desk);
+  color: var(--ink);
+  font-family: "Pretendard", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", system-ui, sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+  word-break: keep-all;
+  -webkit-text-size-adjust: 100%;
+}
+button { font: inherit; color: inherit; cursor: pointer; }
+button:focus-visible, a:focus-visible { outline: 3px solid var(--seal); outline-offset: 2px; }
+[hidden] { display: none !important; }
+
+/* ---------------------------------------------------------------- 바깥 틀 */
+.page { max-width: 1500px; margin: 0 auto; padding: 18px 20px 28px; }
+.top { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; margin-bottom: 12px; }
+.brand { font-size: 30px; font-weight: 800; letter-spacing: -0.01em; margin: 0; }
+.tagline { color: var(--ink-soft); font-size: 16px; margin: 0; flex: 1 1 260px; }
+.sound {
+  border: 2px solid var(--ink); background: var(--card); border-radius: 12px;
+  padding: 8px 14px; font-weight: 700; font-size: 15px;
+}
+.sound[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
+
+.scenes { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px; margin-bottom: 12px; }
+.scene {
+  flex: 0 0 auto; border: 2px solid var(--ink); background: var(--card); border-radius: 14px;
+  padding: 9px 16px; font-weight: 700; font-size: 16px; white-space: nowrap;
+}
+.scene[aria-selected="true"] { background: var(--ink); color: var(--paper); }
+
+.stage { display: grid; grid-template-columns: minmax(0, 1fr) 340px; gap: 22px; align-items: start; }
+.col-label { font-size: 14px; font-weight: 700; color: var(--ink-soft); margin: 0 0 6px; }
+
+/* 차 화면: 설계 크기(가로 창 1400x900, 세로 창 700x1000)로 그린 뒤 비율만 줄인다 */
+.car-frame { background: var(--ink); border-radius: 14px; padding: 6px; }
+.car-view { position: relative; overflow: hidden; border-radius: 9px; background: var(--paper); }
+.car {
+  position: absolute; left: 0; top: 0; transform-origin: 0 0;
+  width: 1400px; height: 900px; padding: 44px; background: var(--paper);
+  font-size: 30px; line-height: 44px;
+}
+.car.tall { width: 700px; height: auto; min-height: 1000px; padding: 30px; }
+
+.guide {
+  margin-top: 10px; background: var(--card); border-radius: 14px; padding: 12px 16px;
+  display: flex; gap: 12px; align-items: baseline; flex-wrap: wrap;
+}
+.guide b { font-size: 17px; }
+.guide .note { color: var(--ink-soft); font-size: 14px; flex-basis: 100%; }
+.guide .why { flex-basis: 100%; font-size: 14px; color: var(--action); border-top: 1px solid var(--rule); padding-top: 8px; margin-top: 2px; }
+
+.signals { margin-top: 10px; display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+.signals .label { font-size: 14px; font-weight: 700; color: var(--ink-soft); margin-right: 4px; }
+.sig {
+  border: 2px solid var(--ink); background: var(--card); border-radius: 12px;
+  padding: 9px 14px; font-weight: 700; font-size: 15px;
+}
+.sig[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
+.sig:disabled { border-color: var(--rule); color: #8A8F94; background: var(--sunken); cursor: default; }
+.sig.say { border-style: dashed; }
+
+/* ---------------------------------------------------------------- 가족 휴대폰 */
+.phone-frame { background: var(--ink); border-radius: 30px; padding: 10px; }
+.phone {
+  background: var(--paper); border-radius: 22px; height: 640px; overflow-y: auto;
+  padding: 22px 16px 28px; font-size: 15px; line-height: 1.55;
+}
+.phone h2 { font-size: 24px; line-height: 1.25; margin: 0; letter-spacing: -0.01em; }
+.phone .lede { color: var(--ink-soft); margin: 4px 0 0; font-size: 14px; }
+.phone .day { margin: 20px 0 8px; font-size: 13px; font-weight: 700; color: var(--ink-soft); }
+.fnote {
+  background: var(--card); border-radius: 16px; padding: 14px 16px; margin-bottom: 10px;
+  display: grid; grid-template-columns: 1fr auto; gap: 2px 12px; align-items: center;
+}
+.fnote.fresh { outline: 3px solid var(--action); outline-offset: -3px; }
+.fnote .time { font-size: 13px; color: var(--ink-soft); font-variant-numeric: tabular-nums; }
+.fnote .line { font-size: 17px; font-weight: 700; line-height: 1.4; grid-column: 1; }
+.fnote .more { color: var(--ink-soft); grid-column: 1; font-size: 14px; }
+.fnote .stamp {
+  grid-column: 2; grid-row: 1 / span 3; width: 54px; height: 54px; border-radius: 50%;
+  border: 3px solid var(--seal); color: var(--seal); display: grid; place-items: center;
+  font-weight: 900; font-size: 14px; transform: rotate(-9deg);
+  box-shadow: inset 0 0 0 3px var(--card), inset 0 0 0 4px var(--seal);
+}
+.fnote.weekly, .fnote.checkin { display: block; }
+.fnote.checkin { background: #FFF4F1; outline: 3px solid var(--very); outline-offset: -3px; }
+.fnote.checkin .line { color: var(--very); }
+.flevel { display: flex; align-items: center; gap: 8px; font-size: 19px; font-weight: 800; margin: 2px 0 4px; }
+.flevel svg { width: 22px; height: 22px; flex: none; }
+.flevel.SLIGHTLY_DIFFERENT { color: var(--slightly); }
+.fnote.weekly .line { font-size: 16px; font-weight: 600; }
+.fnote table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 14px; }
+.fnote td { padding: 6px 0; border-top: 1px solid var(--rule); }
+.fnote td:last-child { text-align: right; font-weight: 700; }
+.fhint { color: var(--ink-soft); font-size: 13px; margin: 8px 0 0; }
+.fhint.ok { color: var(--similar); font-weight: 700; }
+.fnote.checkin .more { font-weight: 700; margin-top: 2px; }
+/* 답장: 정해 둔 문장 단추뿐이다 */
+.freply { border: 2px solid var(--rule); border-radius: 16px; padding: 12px 14px; margin-top: 14px; }
+.freply b { display: block; font-size: 14px; margin-bottom: 8px; }
+.fgrid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.fgrid button { border: 2px solid var(--ink); background: var(--paper); border-radius: 12px; padding: 9px 4px; font-weight: 700; font-size: 13.5px; }
+.fgrid button:active { background: var(--ink); color: var(--paper); }
+.family-only .fgrid button { font-size: 16px; padding: 13px 6px; }
+.family-only .freply b { font-size: 16px; }
+.family-only .fhint { font-size: 14px; }
+.fcall {
+  display: block; margin-top: 12px; padding: 11px 14px; border-radius: 12px; background: var(--action);
+  color: #fff; text-align: center; font-weight: 700; font-size: 15px;
+}
+.fempty { background: var(--card); border-radius: 16px; padding: 20px 16px; margin-top: 20px; color: var(--ink-soft); }
+.ffoot { margin-top: 22px; padding-top: 12px; border-top: 1px solid var(--rule); color: var(--ink-soft); font-size: 12.5px; }
+
+/* ---------------------------------------------------------------- 짝 연결 */
+.pair { margin-top: 12px; background: var(--card); border-radius: 16px; padding: 14px 16px; }
+.pair h3 { font-size: 16px; margin: 0 0 4px; }
+.pair p { margin: 0 0 10px; color: var(--ink-soft); font-size: 14px; }
+.pair .go {
+  border: 0; background: var(--action); color: #fff; border-radius: 12px; padding: 10px 14px;
+  font-weight: 700; font-size: 15px; width: 100%;
+}
+.pair .qr { background: #fff; border-radius: 12px; padding: 10px; display: grid; place-items: center; }
+.pair .qr svg { width: 100%; max-width: 230px; height: auto; display: block; }
+.pair .url { font-size: 11.5px; word-break: break-all; color: var(--ink-soft); margin-top: 8px; user-select: all; }
+.pair .status { font-weight: 700; margin-top: 8px; font-size: 15px; }
+.pair .status.ok { color: var(--similar); }
+.pair .status.bad { color: var(--very); }
+
+.fact { margin-top: 18px; color: var(--ink-soft); font-size: 14px; border-top: 1px solid var(--rule); padding-top: 12px; }
+
+/* ---------------------------------------------------------------- 휴대폰으로 열었을 때(가족 휴대폰 모드) */
+body.family-only { background: var(--paper); }
+.family-only .page { padding: 0; max-width: 520px; }
+.family-only .phone { height: auto; min-height: 100vh; border-radius: 0; padding: 26px 18px 40px; font-size: 16px; }
+.family-only .phone h2 { font-size: 28px; }
+.family-only .fnote .line { font-size: 19px; }
+.linkbar { background: var(--card); border-radius: 14px; padding: 12px 14px; margin: 16px 0 4px; font-size: 14px; }
+.linkbar b.ok { color: var(--similar); }
+.linkbar b.bad { color: var(--very); }
+.alarmbtn { display: block; margin-top: 10px; border: 2px solid var(--ink); background: var(--card); border-radius: 12px; padding: 8px 14px; font-weight: 700; font-size: 15px; }
+.startbtn {
+  width: 100%; border: 0; border-radius: 16px; background: var(--action); color: #fff;
+  font-size: 19px; font-weight: 800; padding: 16px; margin-top: 12px;
+}
+
+/* ---------------------------------------------------------------- 차 화면 안(앱과 같은 구성) */
+.car .t-display { font-size: 84px; line-height: 96px; font-weight: 700; }
+.car .t-title { font-size: 50px; line-height: 64px; font-weight: 700; }
+.car .t-headline { font-size: 38px; line-height: 52px; font-weight: 600; }
+.car .t-body { font-size: 30px; line-height: 44px; }
+.car .t-strong { font-size: 30px; line-height: 44px; font-weight: 600; }
+.car .t-caption { font-size: 24px; line-height: 34px; font-weight: 500; }
+.car .soft { color: var(--ink-soft); }
+.car.tall .t-title.screen { font-size: 40px; line-height: 52px; }
+
+.car .scr { display: flex; flex-direction: column; height: 100%; }
+.car .row { display: flex; align-items: center; }
+.car .grow { flex: 1 1 0; min-width: 0; min-height: 0; }
+.car .cols { display: flex; flex: 1 1 0; min-height: 0; gap: 36px; }
+.car.tall .scr { height: auto; min-height: 940px; }
+.car.tall .cols { flex-direction: column; gap: 20px; flex: none; }
+.car.tall .cols > * { flex: none; }
+.car.tall .metrics { overflow: visible; }
+.car .col { display: flex; flex-direction: column; min-height: 0; min-width: 0; }
+.car .between { justify-content: space-between; }
+
+.car .btn {
+  border: 3px solid transparent; border-radius: 28px; min-height: 112px; padding: 18px 32px;
+  background: var(--action); color: var(--on-action); font-size: 36px; line-height: 46px; font-weight: 700;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;
+}
+.car .btn:active { background: var(--action-pressed); }
+.car .btn small { font-size: 24px; line-height: 34px; font-weight: 500; opacity: 0.86; }
+.car .btn.second { background: var(--card); color: var(--ink); border-color: var(--ink); }
+.car .btn.second small { color: var(--ink-soft); opacity: 1; }
+.car .btn.second:active { background: var(--sunken); }
+.car .btn.danger { background: var(--card); color: var(--very); border-color: var(--very); }
+.car .btn:disabled { background: var(--sunken); color: var(--ink-soft); border-color: transparent; cursor: default; }
+.car .btn.h84 { min-height: 84px; }
+.car .btn.h88 { min-height: 88px; }
+.car .btn.h96 { min-height: 96px; }
+.car .btn.h120 { min-height: 120px; }
+.car .btn.h150 { min-height: 150px; }
+.car .btn.h170 { min-height: 170px; }
+.car .wide-btn { width: 100%; }
+
+.car .cardbox { background: var(--card); border-radius: 28px; padding: 24px 30px; }
+.car .cardbox.replycard { border: 3px solid var(--ink); padding: 18px 30px; }
+.car .tag {
+  border: 2px solid var(--ink-soft); color: var(--ink-soft); border-radius: 10px; padding: 4px 14px;
+  font-size: 24px; line-height: 34px; font-weight: 500; white-space: nowrap;
+}
+.car .stamp {
+  flex: none; width: 118px; height: 118px; border-radius: 50%; border: 6.5px solid var(--seal); color: var(--seal);
+  display: grid; place-items: center; font-size: 32px; font-weight: 900; transform: rotate(-9deg);
+  box-shadow: inset 0 0 0 7px var(--card), inset 0 0 0 9px var(--seal);
+}
+.car .stamp.on-paper { box-shadow: inset 0 0 0 7px var(--paper), inset 0 0 0 9px var(--seal); }
+.car .stamp.big { width: 132px; height: 132px; font-size: 36px; }
+.car .banner {
+  position: absolute; left: 44px; top: 44px; width: 72%; z-index: 5;
+  background: var(--ink); color: var(--paper); border-radius: 22px; padding: 20px 30px;
+  font-size: 30px; line-height: 44px; font-weight: 600;
+}
+.car.tall .banner { left: 30px; top: 30px; width: 62%; }
+
+/* 홈 */
+.car .tiles { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; gap: 22px; flex: 1 1 0; min-height: 0; }
+.car.tall .tiles { flex: none; height: 430px; }
+.car .tile {
+  border: 4px solid var(--ink); border-radius: 36px; background: var(--card); color: var(--ink);
+  padding: 28px 34px; display: flex; flex-direction: column; justify-content: space-between; align-items: flex-start;
+  text-align: left;
+}
+.car .tile svg { width: 96px; height: 96px; }
+.car.tall .tile svg { width: 72px; height: 72px; }
+.car .tile .name { font-size: 72px; line-height: 84px; font-weight: 700; }
+.car.tall .tile { padding: 18px 24px; }
+.car.tall .tile .name { font-size: 60px; line-height: 70px; }
+.car .tile.sel, .car .tile:active { background: var(--ink); color: var(--paper); }
+.car .tile .eta { font-size: 24px; line-height: 34px; font-weight: 500; }
+
+/* 카운트다운 고리 */
+.car .ring { position: relative; width: 380px; height: 380px; flex: none; }
+.car.tall .ring { width: 300px; height: 300px; }
+.car .ring svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+.car .ring .num {
+  position: absolute; inset: 0; display: grid; place-items: center;
+  font-size: 160px; font-weight: 700; line-height: 1;
+}
+.car.tall .ring .num { font-size: 126px; }
+
+/* 일기 */
+.car .metrics { background: var(--card); border-radius: 28px; padding: 14px 30px; overflow-y: auto; }
+.car .metric { display: flex; align-items: center; padding: 15px 0; border-top: 2px solid var(--rule); }
+.car .metric:first-child { border-top: 0; }
+.car .metric .v { font-size: 38px; line-height: 52px; font-weight: 600; }
+.car .mark { width: 30px; height: 30px; flex: none; }
+.car .level-big { display: flex; align-items: center; gap: 20px; color: var(--slightly); font-size: 69px; line-height: 80px; font-weight: 700; }
+.car .level-big svg { width: 64px; height: 64px; }
+
+/* 켜고 끄기 */
+.car .toggle {
+  display: flex; align-items: center; width: 100%; min-height: 104px; border: 0; text-align: left;
+  background: var(--card); border-radius: 24px; padding: 18px 28px; gap: 14px;
+}
+.car .toggle .txt { flex: 1 1 0; }
+.car .switch { width: 92px; height: 52px; border-radius: 26px; background: var(--sunken); position: relative; flex: none; box-shadow: inset 0 0 0 3px var(--ink-soft); }
+.car .switch i { position: absolute; top: 6px; left: 6px; width: 40px; height: 40px; border-radius: 50%; background: var(--ink-soft); }
+.car .toggle[aria-checked="true"] .switch { background: var(--action); box-shadow: none; }
+.car .toggle[aria-checked="true"] .switch i { left: 46px; background: #fff; }
+
+/* 좁은 화면에서는 가족 휴대폰이 아래에 있어, 안부가 가면 화면 아래에 잠깐 알려 준다 */
+.toast {
+  position: fixed; left: 12px; right: 12px; bottom: 14px; z-index: 20; display: none;
+  border: 0; text-align: left; background: var(--ink); color: var(--paper); border-radius: 16px;
+  padding: 12px 16px; font-size: 15px; line-height: 1.4; box-shadow: 0 6px 22px rgba(20, 38, 58, 0.32);
+}
+.toast b { display: block; font-size: 13px; font-weight: 700; opacity: 0.8; }
+
+/* ---------------------------------------------------------------- 좁은 화면 */
+@media (max-width: 900px) {
+  .page { padding: 12px 12px 24px; }
+  .stage { grid-template-columns: minmax(0, 1fr); }
+  .phone { height: 460px; }
+  .brand { font-size: 26px; }
+  .toast.on { display: block; }
+}

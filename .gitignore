@@ -1,0 +1,22 @@
+# 빌드 산출물
+.gradle/
+build/
+app/build/
+local.properties
+*.iml
+.idea/
+.kotlin/
+
+# 서명 키와 비밀번호는 저장소에 올리지 않는다
+signing/
+*.jks
+*.keystore
+
+# 릴레이 실행 중 생기는 데이터
+relay/data/
+node_modules/
+
+.DS_Store
+
+# 배포용 묶음
+dist/

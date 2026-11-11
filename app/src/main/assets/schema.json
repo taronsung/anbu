@@ -1,0 +1,53 @@
+{
+  "packageName": "app.anbu.car",
+  "appDescription": "A greeting app for senior drivers that tells their family when they depart and arrive, and reads the driver a weekly driving diary.",
+  "invokeWord": "안부",
+  "version": "0.1.0",
+  "actionCalls": [
+    {
+      "type": "function",
+      "function": {
+        "name": "SEND_DEPARTURE_NOTE",
+        "description": "Send a short note to the driver's family saying that the driver is departing now, with the expected arrival time when it is known.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "destination": {
+              "type": "string",
+              "description": "The saved place the driver is heading to.",
+              "enum": ["집", "병원", "딸네", "마트"]
+            }
+          },
+          "required": []
+        },
+        "component": "activity"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "SEND_ARRIVAL_NOTE",
+        "description": "Send a note to the driver's family saying that the driver has arrived safely, after a ten second window in which the driver can cancel.",
+        "parameters": {
+          "type": "object",
+          "properties": {},
+          "required": []
+        },
+        "component": "activity"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "READ_WEEKLY_DIARY",
+        "description": "Show and read aloud the driver's weekly driving diary, which compares this week's driving with the driver's own usual pattern. It is available only while the car is parked.",
+        "parameters": {
+          "type": "object",
+          "properties": {},
+          "required": []
+        },
+        "component": "activity"
+      }
+    }
+  ]
+}

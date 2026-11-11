@@ -1,0 +1,392 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#F2EEE4">
+<link rel="icon" href="data:,">
+<title>안부 가족 화면</title>
+<style>
+  :root {
+    --paper: #F2EEE4;
+    --card: #FCFAF5;
+    --sunken: #E6E0D2;
+    --ink: #14263A;
+    --ink-soft: #465564;
+    --rule: #CBC3B1;
+    --indigo: #173F5F;
+    --seal: #BE2F1D;
+    --similar: #256447;
+    --slightly: #8A5600;
+    --very: #B3261E;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "Pretendard", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", system-ui, sans-serif;
+    font-size: 17px;
+    line-height: 1.55;
+    word-break: keep-all;
+    -webkit-text-size-adjust: 100%;
+  }
+  main { max-width: 480px; margin: 0 auto; padding: 28px 20px 56px; }
+  h1 { font-size: 30px; line-height: 1.25; margin: 0; letter-spacing: -0.01em; }
+  .lede { color: var(--ink-soft); margin: 6px 0 0; }
+  .day { margin: 30px 0 10px; font-size: 15px; font-weight: 700; color: var(--ink-soft); }
+  .note {
+    background: var(--card);
+    border-radius: 20px;
+    padding: 18px 20px;
+    margin-bottom: 12px;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 4px 14px;
+    align-items: center;
+  }
+  .note.fresh { outline: 3px solid var(--indigo); outline-offset: -3px; }
+  .time { font-size: 15px; color: var(--ink-soft); font-variant-numeric: tabular-nums; }
+  .line { font-size: 20px; font-weight: 700; line-height: 1.4; grid-column: 1; }
+  .more { color: var(--ink-soft); grid-column: 1; }
+  /* 도장: 차 화면에서 "전함" 도장이 찍힌 안부가 여기에 "도착" 도장으로 온다 */
+  .seal {
+    grid-column: 2; grid-row: 1 / span 3;
+    width: 62px; height: 62px; border-radius: 50%;
+    border: 3.5px solid var(--seal); color: var(--seal);
+    display: grid; place-items: center;
+    font-weight: 900; font-size: 16px; line-height: 1.1; text-align: center;
+    transform: rotate(-9deg);
+    box-shadow: inset 0 0 0 3px var(--card), inset 0 0 0 4px var(--seal);
+  }
+  .note.checkin { background: #FFF4F1; outline: 3px solid var(--very); outline-offset: -3px; }
+  .note.checkin .line { color: var(--very); }
+  .weekly { display: block; }
+  .level { display: flex; align-items: center; gap: 10px; font-size: 22px; font-weight: 800; margin: 4px 0 6px; }
+  .level svg { width: 26px; height: 26px; flex: none; }
+  .level.SIMILAR { color: var(--similar); }
+  .level.SLIGHTLY_DIFFERENT { color: var(--slightly); }
+  .level.VERY_DIFFERENT { color: var(--very); }
+  .weekly .line { font-size: 18px; font-weight: 600; }
+  table { width: 100%; border-collapse: collapse; margin-top: 12px; font-size: 16px; }
+  td { padding: 8px 0; border-top: 1px solid var(--rule); }
+  td:last-child { text-align: right; font-weight: 700; font-variant-numeric: tabular-nums; }
+  .call {
+    display: block; margin-top: 14px; padding: 14px 16px; border-radius: 14px;
+    background: var(--indigo); color: #fff; text-align: center; font-weight: 700; font-size: 18px;
+    text-decoration: none;
+  }
+  .call:focus-visible, button:focus-visible, input:focus-visible { outline: 3px solid var(--seal); outline-offset: 2px; }
+  .hint { color: var(--ink-soft); font-size: 15px; margin-top: 10px; }
+  .empty { background: var(--card); border-radius: 20px; padding: 26px 20px; margin-top: 26px; color: var(--ink-soft); }
+  footer { margin-top: 34px; padding-top: 16px; border-top: 1px solid var(--rule); color: var(--ink-soft); font-size: 14px; }
+  footer button { background: none; border: 0; padding: 0; color: var(--ink-soft); font: inherit; text-decoration: underline; cursor: pointer; }
+  form { margin-top: 28px; }
+  label { display: block; font-weight: 700; margin-bottom: 8px; }
+  input {
+    width: 100%; font: inherit; font-size: 30px; font-weight: 800; letter-spacing: 0.24em; text-align: center;
+    text-transform: uppercase; padding: 16px 10px; border-radius: 16px; border: 3px solid var(--ink);
+    background: var(--card); color: var(--ink);
+  }
+  form button {
+    width: 100%; margin-top: 14px; padding: 16px; border: 0; border-radius: 16px;
+    background: var(--indigo); color: #fff; font: inherit; font-size: 19px; font-weight: 700; cursor: pointer;
+  }
+  .error { color: var(--very); margin-top: 10px; min-height: 1.5em; }
+  /* 답장: 정해 둔 문장 단추뿐이다. 글을 쓰는 칸은 없다. */
+  .reply { border: 2px solid var(--rule); border-radius: 20px; padding: 16px 18px 14px; margin: 18px 0 6px; }
+  .reply-title { font-weight: 700; margin: 0 0 10px; }
+  .reply-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .reply-grid button {
+    font: inherit; font-size: 16px; font-weight: 700; padding: 13px 8px; border-radius: 14px; cursor: pointer;
+    border: 2px solid var(--ink); background: var(--paper); color: var(--ink);
+  }
+  .reply-grid button:active { background: var(--ink); color: var(--paper); }
+  .reply-grid button:disabled { border-color: var(--rule); color: var(--ink-soft); cursor: default; }
+  .reply-status { color: var(--ink-soft); font-size: 15px; margin: 10px 0 0; min-height: 1.5em; }
+  .reply-status.ok { color: var(--similar); font-weight: 700; }
+  .alarm { margin: 14px 0 0; font-size: 15px; color: var(--ink-soft); }
+  .alarm button {
+    font: inherit; font-weight: 700; padding: 8px 14px; border-radius: 12px; cursor: pointer; margin-right: 8px;
+    border: 2px solid var(--ink); background: var(--card); color: var(--ink);
+  }
+  [hidden] { display: none !important; }
+</style>
+</head>
+<body>
+<main>
+  <section id="enter" hidden>
+    <h1>안부</h1>
+    <p class="lede">부모님 차에서 알려 준 가족 초대 코드를 넣어 주세요.</p>
+    <form id="codeForm" autocomplete="off">
+      <label for="code">가족 초대 코드 여섯 자리</label>
+      <input id="code" name="code" inputmode="latin" maxlength="7" autocapitalize="characters" spellcheck="false" required>
+      <button type="submit">안부 보기</button>
+      <p class="error" id="codeError" role="alert"></p>
+    </form>
+    <p class="hint">코드는 차의 안부 앱 설정 화면에 있습니다.</p>
+  </section>
+
+  <section id="timeline" hidden>
+    <h1 id="title">안부</h1>
+    <p class="lede">차가 도착하면 대신 알려 드려요. 위치는 오지 않아요.</p>
+    <p class="alarm" id="alarm" hidden></p>
+    <div id="notes" aria-live="polite"></div>
+    <!-- 답장 단추는 가장 최근 날의 안부 아래에 놓는다(refresh에서 옮긴다) -->
+    <div class="reply" id="reply" hidden>
+      <p class="reply-title">답장 보내기</p>
+      <div class="reply-grid" id="replyButtons"></div>
+      <p class="reply-status" id="replyStatus" role="status">운전 중에는 읽지 않고, 차를 세운 뒤에 읽어 드려요.</p>
+    </div>
+    <div class="empty" id="empty" hidden>아직 온 안부가 없어요. 다음에 도착하시면 여기에 보여요.</div>
+    <footer>
+      이 화면에는 지도가 없습니다. 차는 도착 시각과 본인이 붙인 장소 이름만 보냅니다.
+      안부는 30일 동안 보관합니다. 시제품 시연용 릴레이로 받은 내용입니다.
+      <br><button type="button" id="forget">다른 코드로 보기</button>
+    </footer>
+  </section>
+</main>
+
+<script>
+(() => {
+  "use strict";
+  const $ = (id) => document.getElementById(id);
+  const CODE_RE = /^[A-Z2-9]{6}$/;
+  const LEVEL_LABEL = { SIMILAR: "평소와 비슷", SLIGHTLY_DIFFERENT: "조금 다름", VERY_DIFFERENT: "많이 다름" };
+  // 단계는 색만이 아니라 모양으로도 구분한다(차 화면과 같은 모양).
+  const LEVEL_MARK = {
+    SIMILAR: '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10.5" fill="currentColor"/></svg>',
+    SLIGHTLY_DIFFERENT: '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9.2" fill="none" stroke="currentColor" stroke-width="2.8"/><path d="M12 2.8a9.2 9.2 0 0 0 0 18.4z" fill="currentColor"/></svg>',
+    VERY_DIFFERENT: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .8 23.2 12 12 23.2.8 12z" fill="currentColor"/></svg>',
+  };
+
+  let code = "";
+  let seen = null; // 처음 불러온 뒤부터 새로 온 안부를 표시한다
+  let timer = 0;
+
+  function fromUrlOrStorage() {
+    const q = new URLSearchParams(location.search).get("code");
+    const stored = (() => { try { return localStorage.getItem("anbu.code"); } catch { return null; } })();
+    const c = (q || stored || "").toUpperCase().replace(/[^A-Z2-9]/g, "");
+    return CODE_RE.test(c) ? c : "";
+  }
+
+  function clock(iso) {
+    // 차가 보낸 시각을 그 시간대 그대로 읽는다: "2026-11-11T14:10+09:00"
+    const m = /T(\d{2}):(\d{2})/.exec(iso);
+    if (!m) return "";
+    const h = Number(m[1]);
+    return `${h < 12 ? "오전" : "오후"} ${h % 12 === 0 ? 12 : h % 12}:${m[2]}`;
+  }
+
+  function dayLabel(iso) {
+    const d = iso.slice(0, 10);
+    const pad = (n) => String(n).padStart(2, "0");
+    const key = (t) => `${t.getFullYear()}-${pad(t.getMonth() + 1)}-${pad(t.getDate())}`;
+    const today = new Date();
+    const yesterday = new Date(today.getTime() - 24 * 3600 * 1000);
+    if (d === key(today)) return "오늘";
+    if (d === key(yesterday)) return "어제";
+    return `${Number(d.slice(5, 7))}월 ${Number(d.slice(8, 10))}일`;
+  }
+
+  function el(tag, cls, text) {
+    const e = document.createElement(tag);
+    if (cls) e.className = cls;
+    if (text !== undefined) e.textContent = text;
+    return e;
+  }
+
+  function callLink(label) {
+    const a = el("a", "call", label);
+    a.href = "tel:";
+    return a;
+  }
+
+  function render(note, fresh) {
+    const card = el("article", "note" + (fresh ? " fresh" : ""));
+    const who = note.who || "";
+    const withoutWho = (line) => line.replace(new RegExp("^" + who + "께서 "), "").replace(/^지금 /, "");
+
+    if (note.type === "WEEKLY") {
+      card.classList.add("weekly");
+      card.append(el("div", "time", `${clock(note.at)}에 나눠 주신 이번 주 운전 일기`));
+      const level = el("div", "level " + (note.level || ""));
+      level.innerHTML = LEVEL_MARK[note.level] || "";
+      level.append(el("span", "", LEVEL_LABEL[note.level] || ""));
+      card.append(level, el("div", "line", note.line));
+      if (note.details) {
+        const table = el("table");
+        for (const [k, v] of Object.entries(note.details)) {
+          const tr = el("tr");
+          tr.append(el("td", "", k), el("td", "", v));
+          table.append(tr);
+        }
+        card.append(table);
+      }
+      card.append(el("p", "hint", `${who}께서 먼저 보시고 나누기로 하신 내용이에요. 평소의 본인 운전과 견준 것이고, 건강을 판단한 것이 아니에요.`));
+      if (note.level && note.level !== "SIMILAR") card.append(callLink("전화로 안부 묻기"));
+      return card;
+    }
+
+    if (note.type === "CHECK_IN") {
+      card.classList.add("checkin", "weekly");
+      card.append(el("div", "time", clock(note.at)), el("div", "line", note.line));
+      if (note.placeLabel) card.append(el("div", "more", note.placeLabel));
+      card.append(callLink("지금 전화 걸기"));
+      card.append(el("p", "hint", "차가 119에 자동으로 신고하지는 않습니다. 이 알림에는 위치가 없습니다."));
+      card.append(el("p", "hint", "연락이 닿지 않으면 119에 신고하세요. 배우자와 2촌 이내 친족은 긴급구조기관에 위치 확인을 요청할 수 있습니다(위치정보법 제29조 제1항)."));
+      return card;
+    }
+
+    card.append(el("div", "time", clock(note.at)));
+    card.append(el("div", "line", withoutWho(note.line)));
+    const more = [note.etaText, note.durationNote].filter(Boolean).join(" ");
+    if (more) card.append(el("div", "more", more));
+    card.append(el("div", "seal", note.type === "ARRIVAL" ? "도착" : "출발"));
+    return card;
+  }
+
+  // 알림: 이 화면이 열려 있는 동안(다른 탭이나 뒤에 있어도) 새 안부가 오면 브라우저 알림을 띄운다.
+  // 서버가 밀어 보내는 알림이 아니므로 화면을 닫으면 오지 않는다.
+  const canNotify = "Notification" in window && window.isSecureContext;
+  let swReady = null;
+  if (canNotify && "serviceWorker" in navigator) {
+    swReady = navigator.serviceWorker.register("sw.js").then(() => navigator.serviceWorker.ready).catch(() => null);
+  }
+  function drawAlarm() {
+    const box = $("alarm");
+    if (!canNotify) { box.hidden = true; return; }
+    box.hidden = false;
+    box.textContent = "";
+    if (Notification.permission === "granted") {
+      box.textContent = "알림이 켜져 있어요. 이 화면을 열어 둔 동안 새 안부가 오면 알려 드려요.";
+    } else if (Notification.permission === "denied") {
+      box.hidden = true;               // 브라우저에서 막아 둔 경우에는 아무것도 보이지 않는다
+    } else {
+      const b = el("button", "", "알림 켜기");
+      b.type = "button";
+      b.addEventListener("click", () => Notification.requestPermission().then(drawAlarm));
+      box.append(b, "새 안부가 오면 알려 드려요.");
+    }
+  }
+  async function notify(note) {
+    if (!canNotify || Notification.permission !== "granted") return;
+    const title = note.type === "CHECK_IN" ? "안부: 답이 없으셨어요" : `${note.who || ""}의 안부`.trim();
+    const options = { body: note.line, tag: note.id, lang: "ko" };
+    try {
+      const reg = swReady && (await swReady);
+      if (reg && reg.showNotification) await reg.showNotification(title, options);   // 안드로이드 크롬은 이 길만 된다
+      else new Notification(title, options);
+    } catch { /* 알림을 띄우지 못하는 브라우저 */ }
+  }
+
+  // 가족이 보낼 수 있는 답장. 차의 앱과 릴레이가 같은 이름을 쓴다. 글을 써서 보내는 길은 없다.
+  const REPLIES = [
+    ["SAFE_TRIP", "잘 다녀오세요"], ["DRIVE_SAFE", "조심히 오세요"],
+    ["CALL_ON_ARRIVAL", "도착하면 전화 주세요"], ["THANKS", "고마워요"],
+  ];
+
+  const replyBox = $("reply");
+  function replyStatus(text, ok) {
+    const s = $("replyStatus");
+    s.textContent = text;
+    s.className = "reply-status" + (ok ? " ok" : "");
+  }
+
+  async function sendReply(replyCode, text) {
+    const buttons = [...$("replyButtons").children];
+    buttons.forEach((b) => { b.disabled = true; });
+    setTimeout(() => buttons.forEach((b) => { b.disabled = false; }), 3200);
+    try {
+      const res = await fetch("/api/replies", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ v: 1, familyCode: code, code: replyCode }),
+      });
+      if (res.status === 201) replyStatus(`"${text}"를 보냈어요. 차를 세운 뒤에 읽어 드려요.`, true);
+      else if (res.status === 429) replyStatus("조금 뒤에 다시 눌러 주세요.", false);
+      else replyStatus("보내지 못했어요.", false);
+    } catch {
+      replyStatus("보내지 못했어요. 연결을 확인해 주세요.", false);
+    }
+  }
+
+  for (const [replyCode, text] of REPLIES) {
+    const b = el("button", "", text);
+    b.type = "button";
+    b.addEventListener("click", () => sendReply(replyCode, text));
+    $("replyButtons").append(b);
+  }
+
+  async function refresh() {
+    let data;
+    try {
+      const res = await fetch(`/api/notes?code=${encodeURIComponent(code)}`, { cache: "no-store" });
+      if (!res.ok) return;
+      data = await res.json();
+    } catch { return; }
+
+    const notes = data.notes || [];
+    const ids = new Set(notes.map((n) => n.id + ":" + n.receivedAt));
+    const box = $("notes");
+    box.after(replyBox);              // 목록을 비우기 전에 답장 칸을 밖으로 빼 둔다
+    box.textContent = "";
+    $("empty").hidden = notes.length > 0;
+    replyBox.hidden = notes.length === 0;
+    if (notes[0]?.who) {
+      $("title").textContent = `${notes[0].who}의 안부`;
+      document.title = `${notes[0].who}의 안부`;
+    }
+    let lastDay = "";
+    let days = 0;
+    for (const n of notes) {
+      const day = dayLabel(n.at);
+      if (day !== lastDay) {
+        if (++days === 2) box.append(replyBox);   // 가장 최근 날의 안부가 끝난 자리
+        box.append(el("h2", "day", day));
+        lastDay = day;
+      }
+      const fresh = seen !== null && !seen.has(n.id + ":" + n.receivedAt);
+      if (fresh) notify(n);
+      box.append(render(n, fresh));
+    }
+    // 새로 온 안부의 테두리는 다음에 또 새 안부가 올 때까지 남겨 둔다.
+    if (seen === null || [...ids].some((k) => !seen.has(k))) seen = ids;
+  }
+
+  function show() {
+    code = fromUrlOrStorage();
+    clearInterval(timer);
+    $("enter").hidden = !!code;
+    $("timeline").hidden = !code;
+    if (!code) { $("code").focus(); return; }
+    try { localStorage.setItem("anbu.code", code); } catch { /* 저장이 막힌 브라우저 */ }
+    seen = null;
+    drawAlarm();
+    refresh();
+    timer = setInterval(refresh, 2000);
+  }
+
+  $("codeForm").addEventListener("submit", (e) => {
+    e.preventDefault();
+    const c = $("code").value.toUpperCase().replace(/[^A-Z2-9]/g, "");
+    if (!CODE_RE.test(c)) {
+      $("codeError").textContent = "여섯 자리 코드를 다시 확인해 주세요. 숫자 0과 1, 영문 O와 I는 쓰지 않습니다.";
+      return;
+    }
+    history.replaceState(null, "", `?code=${c}`);
+    show();
+  });
+
+  $("forget").addEventListener("click", () => {
+    try { localStorage.removeItem("anbu.code"); } catch { /* 무시 */ }
+    history.replaceState(null, "", location.pathname);
+    show();
+  });
+
+  show();
+})();
+</script>
+</body>
+</html>
