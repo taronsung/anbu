@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#F2EEE4">
+<meta name="description" content="부모님 차가 도착하면 가족에게 대신 안부를 전하는 차량용 앱 안부를 브라우저에서 눌러 보는 시연">
+<title>안부 웹 시연</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="page" id="desk">
+  <header class="top">
+    <h1 class="brand">안부</h1>
+    <p class="tagline">부모님 차가 도착하면 가족에게 "잘 도착했어요"를 대신 전합니다. 아래 차 화면을 눌러 보세요.</p>
+    <button class="sound" id="sound" type="button" aria-pressed="false">소리 켜기</button>
+  </header>
+
+  <nav class="scenes" id="scenes" role="tablist" aria-label="시연 장면"></nav>
+
+  <div class="stage">
+    <section aria-label="아버지의 차 화면">
+      <p class="col-label">아버지의 차 화면</p>
+      <div class="car-frame"><div class="car-view" id="carView"><div class="car" id="car"></div></div></div>
+      <div class="guide" id="guide" aria-live="polite"></div>
+      <div class="signals" id="signals" aria-label="차량 신호"></div>
+    </section>
+
+    <aside aria-label="딸의 휴대폰">
+      <p class="col-label">딸의 휴대폰 (가족 화면)</p>
+      <div class="phone-frame"><div class="phone" id="phone"></div></div>
+      <div class="pair" id="pair"></div>
+    </aside>
+  </div>
+
+  <p class="fact">이 페이지는 앱의 동작을 브라우저에서 재현한 것입니다. 실제 앱은 Pleos Connect에서 차량 신호(기어, 속도, 내비게이션 도착 등)로 동작합니다.</p>
+</div>
+
+<button class="toast" id="toast" type="button" aria-live="polite"></button>
+
+<!-- 휴대폰으로 QR을 찍어 들어오면 이 화면만 보인다 -->
+<div class="page" id="familyOnly" hidden>
+  <div class="phone" id="phoneFull"></div>
+</div>
+
+<script src="vendor/qrcode.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
